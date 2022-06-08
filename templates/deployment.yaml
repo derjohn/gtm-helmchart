@@ -40,31 +40,32 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: http
+              port: 8080
             initialDelaySeconds: 30
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /healthz
-              port: http
+              port: 8080
             initialDelaySeconds: 30
             periodSeconds: 30
           env:
           {{- if .Values.env.preview_server_url }}
           - name: PREVIEW_SERVER_URL
-            value: "https://preview.example.com"
+            value: "{{ .Values.env.preview_server_url }}"
           {{- end }}
           {{- if .Values.env.run_as_preview_server }}
           - name: RUN_AS_PREVIEW_SERVER
-            value: "false"
+            value: "{{ .Values.env.run_as_preview_server }}"
           {{- end }}
           - name: PORT
             value: "8080"
-          envFrom:
-          - secretRef:
-              name: {{ .Values.envFrom.secretRefName }}
-              key: CONTAINER_CONFIG
-              optional: false
+          - name: CONTAINER_CONFIG
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.envFrom.secretRefName }}
+                key: CONTAINER_CONFIG
+                optional: false
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
