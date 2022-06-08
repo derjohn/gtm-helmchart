@@ -2,8 +2,19 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+{{ include "gtm.fullname" . }}
+
 replicaCount: 2
 
+env:
+  preview_server_url: "https://preview.example.com"
+  run_as_preview_server: "false"
+envFrom:
+  secretRefName: container_config
+  # The secret needs to contain the key CONTAINER_CONFIG with yout container id
+  # If you want helm to create yout secret, to must tell it to do so and give it a value
+  create: false
+  container_config_value: "123456789"
 image:
   repository: gcr.io/cloud-tagging-10302018/gtm-cloud-image
   pullPolicy: IfNotPresent
