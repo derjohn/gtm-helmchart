@@ -5,7 +5,7 @@
 replicaCount: 2
 
 env:
-  preview_server_url: "https://preview.example.com"
+  #preview_server_url: "https://preview.example.com"
   run_as_preview_server: "false"
 envFrom:
   secretRefName: gtm-container-config
